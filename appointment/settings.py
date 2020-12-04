@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'schedule.apps.ScheduleConfig',
+    'django-heroku',
 ]
 
 MIDDLEWARE = [
