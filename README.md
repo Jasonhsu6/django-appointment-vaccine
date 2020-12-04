@@ -1,2 +1,2 @@
-# django-appoointment-vaccine
+# django-appointment-vaccine
 A django based appointment system
