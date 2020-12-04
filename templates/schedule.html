@@ -1,0 +1,69 @@
+{% include "header.html" %}
+{% load waitlist_tag %}
+<body>
+    <title>Schedule an appointment</title>
+
+    <section style="padding:80px 0">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <form action="/schedule/" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="schedule_date">Choose a date:</label>
+                        {% if request.session.schedule_date %}
+                            <input required type="date" class="form-control" id="schedule_date" name="schedule_date"
+                            value="{{ request.session.schedule_date }}">
+                        {% else %}
+                            <input required type="date" class="form-control" id="schedule_date" name="schedule_date">
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Check Availability</button>
+                </form>
+                {% if request.session.schedule_date %}
+
+                    {% if not available %}
+                        <h4>No appointment available on {{ request.session.schedule_date }}</h4>
+                        <p>We have 3 quota every day in case of cancellation or changes.
+                            Once you are in the list we will contact you 1 day ahead once we have available time slots
+                            for you but please keep in mind that we
+                            <strong>DO NOT</strong> guarantee you get the shot that day.</p>
+                        {% get_waitlist_count request.session.schedule_date as headcount %}
+                        <h4>Current list: {{ headcount }} / 3 on {{ request.session.schedule_date}} </h4>
+                        {% if headcount < 3 %}
+                            <a class="btn btn-info" href="/confirm/">I understand the policy and let me in the waitlist</a>
+                        {% else %}
+                            <a class="btn btn-info" disabled>I understand the policy and let me in the waitlist</a>
+                        {% endif %}
+                    {% else %}
+                    <h4>Available appointments for {{ request.session.schedule_date }}</h4>
+                    <form action="/schedule/" method="post">
+                        {% csrf_token %}
+
+                        {% for time in time_slots %}
+                            <div class="form-check form-check-inline">
+                                {% if time in available %}
+                                    <input required class="form-check-input" type="radio" name="schedule_time" id="schedule_time" value="{{ time }}">
+                                {% else %}
+                                    <input class="form-check-input" type="radio" name="schedule_time" id="schedule_time" value="{{ time }}" disabled>
+                                {% endif %}
+                                <label class="form-check-label" for="schedule_time">{{ time }}</label>
+                            </div>
+                        {% endfor %}
+                        <hr>
+                        <button type="submit" class="btn btn-info">Schedule an appointment</button>
+                    </form>
+                    {% endif %}
+                {% endif %}
+
+
+            </div>
+        </div>
+    </section>
+    <script>
+        //var today = new Date().toISOString().split('T')[0];
+        var tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        document.getElementsByName("schedule_date")[0].setAttribute('min', tomorrow.toISOString().split('T')[0]);
+    </script>
+{% include "footer.html" %}
+</body>

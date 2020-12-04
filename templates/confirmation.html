@@ -1,0 +1,50 @@
+{% include "header.html" %}
+{% load waitlist_tag %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <br />
+        {% if request.session.schedule_date %}
+            {% if request.session.schedule_time %}
+            <h5>You have selected {{ request.session.schedule_date }}
+            at {{ request.session.schedule_time }}</h5>
+            {% else %}
+            <h5>You choose to join waitlist on {{ request.session.schedule_date }}</h5>
+            {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <small class="form-text text-muted">We'll never share your info with anyone else.</small>
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input required type="text" class="form-control" id="first_name" name="first_name">
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name: </label>
+                <input type="text" class="form-control" id="last_name" name="last_name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email: </label>
+                <input type="email" class="form-control" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone: </label>
+                <input required type="text" class="form-control" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="birthday">Date of birth: </label>
+                <input required type="date" class="form-control" id="birthday" name="birthday">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {% else %}
+        <h5>Please select a time first!</h5>
+        <a class="btn btn-primary" href="/schedule/">Back</a>
+        {% endif %}
+    </div>
+    <script>
+        //var today = new Date().toISOString().split('T')[0];
+        var yesterday = new Date();
+        yesterday.setDate(tomorrow.getDate() + 1)
+        document.getElementsByName("birthday")[0].setAttribute('max', yesterday.toISOString().split('T')[0]);
+    </script>
+</div>
+{% include "footer.html" %}
