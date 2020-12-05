@@ -1,1 +1,1 @@
-web: gunicorn appointment.asgi
+web: uvicorn appointment.asgi
