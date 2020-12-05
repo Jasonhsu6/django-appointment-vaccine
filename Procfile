@@ -1,1 +1,1 @@
-web gunicorn appointment.asgi:application -k uvicorn.workers.UvicornWorker
+web gunicorn appointment.wsgi:application
