@@ -1,1 +1,1 @@
-web: uvicorn appointment.asgi:application --port $PORT
+web gunicorn appointment.asgi:application -k uvicorn.workers.UvicornWorker
