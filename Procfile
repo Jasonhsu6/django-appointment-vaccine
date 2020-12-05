@@ -1,1 +1,1 @@
-web: uvicorn appointment.asgi --port $PORT
+web: uvicorn appointment.asgi:application --port $PORT
