@@ -17,24 +17,10 @@
                             <input required type="date" class="form-control" id="schedule_date" name="schedule_date">
                         {% endif %}
                     </div>
-                    <button type="submit" class="btn btn-primary">Check Availability</button>
+                    <button type="submit" class="btn btn-primary">Check Availability/确认可预约时间段</button>
                 </form>
+                {% if available %}
                 {% if request.session.schedule_date %}
-
-                    {% if not available %}
-                        <h4>No appointment available on {{ request.session.schedule_date }}</h4>
-                        <p>We have 3 quota every day in case of cancellation or changes.
-                            Once you are in the list we will contact you 1 day ahead once we have available time slots
-                            for you but please keep in mind that we
-                            <strong>DO NOT</strong> guarantee you get the shot that day.</p>
-                        {% get_waitlist_count request.session.schedule_date as headcount %}
-                        <h4>Current list: {{ headcount }} / 3 on {{ request.session.schedule_date}} </h4>
-                        {% if headcount < 3 %}
-                            <a class="btn btn-info" href="/confirm/">I understand the policy and let me in the waitlist</a>
-                        {% else %}
-                            <a class="btn btn-info" disabled>I understand the policy and let me in the waitlist</a>
-                        {% endif %}
-                    {% else %}
                     <h4>Available appointments for {{ request.session.schedule_date }}</h4>
                     <form action="/schedule/" method="post">
                         {% csrf_token %}
@@ -47,14 +33,24 @@
                                     <input class="form-check-input" type="radio" name="schedule_time" id="schedule_time" value="{{ time }}" disabled>
                                 {% endif %}
                                 <label class="form-check-label" for="schedule_time">{{ time }}</label>
+
                             </div>
                         {% endfor %}
+                        {% get_waitlist_count request.session.schedule_date as headcount %}
+                            <div class="form-check form-check-inline">
+                                {% if headcount < 3 %}
+                                    <input class="form-check-input" type="radio" name="schedule_time" id="schedule_time" value="waitlist">
+                                    <label class="form-check-label" for="schedule_time">Waitlist: {{ headcount }}/3</label>
+                                {% else %}
+                                    <input class="form-check-input" type="radio" name="schedule_time" id="schedule_time" value="waitlist">
+                                    <label class="form-check-label" for="schedule_time">Waitlist: {{ headcount }}/3</label>
+                                {% endif %}
+                            </div>
                         <hr>
-                        <button type="submit" class="btn btn-info">Schedule an appointment</button>
+                        <button type="submit" class="btn btn-info">Schedule an appointment/预约</button>
                     </form>
                     {% endif %}
                 {% endif %}
-
 
             </div>
         </div>

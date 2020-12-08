@@ -39,7 +39,6 @@ def check_availability(request):
     for time_slot in time_slots:
         if not Appointment.objects.filter(date=date).filter(time=time_slot):
             available.append(time_slot)
-    print(available)
     return available
 
 
@@ -63,18 +62,20 @@ def confirm(request):
             message = "you have exceeded the limit of making appointment (maximum 5 per number)"
             return render(request, "failure.html", context={"message": message})
         else:
+            if info["time"] == "waitlist":
+                info["time"] = None
             appointment = Appointment(
                 date=datetime.datetime.strptime(info["date"], "%m/%d/%Y").date().strftime("%Y-%m-%d"),
                 time=info["time"],
                 first_name=info["first_name"], last_name=info["last_name"],
                 email=info["email"], phone=info["phone"], birthday=info["birthday"])
             appointment.save()
-            return render(request, "success.html")
             if info["email"]:
                 if info["time"]:
                     send_confirmation_email(info, "appointment")
                 else:
                     send_confirmation_email(info, "waitlist")
+            return render(request, "success.html")
     return render(request, "confirmation.html")
 
 # def confirm(request):

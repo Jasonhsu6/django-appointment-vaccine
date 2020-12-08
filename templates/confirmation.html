@@ -5,11 +5,19 @@
     <div class="col-lg-8 mx-auto">
         <br />
         {% if request.session.schedule_date %}
-            {% if request.session.schedule_time %}
+            {% if request.session.schedule_time != "waitlist" %}
             <h5>You have selected {{ request.session.schedule_date }}
             at {{ request.session.schedule_time }}</h5>
             {% else %}
             <h5>You choose to join waitlist on {{ request.session.schedule_date }}</h5>
+                <p>We have 3 quota every day in case of cancellation or changes.
+                    Once you are in the list we will contact you 1 day ahead once we have available time slots
+                    for you but please keep in mind that we
+                    <strong>DO NOT</strong> guarantee you get the shot that day.</p>
+                <p>我们每天都会有3个等待名单的名额以防当天预约的取消或者变动，当你加入等待名单后，
+                    我们会提前一天电话联系您并告知您第二天的安排，但是我们<strong>不能保证</strong>您第二天一定能预约上</p>
+                {% get_waitlist_count request.session.schedule_date as headcount %}
+                <h4>Current list: {{ headcount }} / 3 on {{ request.session.schedule_date}} </h4>
             {% endif %}
         <form method="post">
             {% csrf_token %}
@@ -36,8 +44,17 @@
                 <label for="email">Email: </label>
                 <input type="email" class="form-control" id="email" name="email">
             </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
+            {% if request.session.schedule_time == "waitlist" %}
+                {% if headcount < 3 %}
+                    <a class="btn btn-info" href="/confirm/">I understand the policy and let me in the waitlist/
+                    我已阅读注意事项，加入等待名单</a>
+                {% else %}
+                    <a class="btn btn-info" disabled>I understand the policy and let me in the waitlist、
+                    我已阅读注意事项，加入等待名单</a>
+                {% endif %}
+            {% else %}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            {% endif %}
         </form>
         {% else %}
         <h5>Please select a time first!</h5>
@@ -46,9 +63,9 @@
     </div>
     <script>
         //var today = new Date().toISOString().split('T')[0];
-        var yesterday = new Date();
-        yesterday.setDate(tomorrow.getDate() + 1)
-        document.getElementsByName("birthday")[0].setAttribute('max', yesterday.toISOString().split('T')[0]);
+        var birth = new Date(2002, 0, 1);
+        birth.setDate(tomorrow.getDate() - 1)
+        document.getElementsByName("birthday")[0].setAttribute('max', birth.toISOString().split('T')[0]);
     </script>
 </div>
 </section>
