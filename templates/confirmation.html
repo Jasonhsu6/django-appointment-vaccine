@@ -46,11 +46,11 @@
             </div>
             {% if request.session.schedule_time == "waitlist" %}
                 {% if headcount < 3 %}
-                    <a class="btn btn-info" href="/confirm/">I understand the policy and let me in the waitlist/
-                    我已阅读注意事项，加入等待名单</a>
+                    <button type="submit" class="btn btn-info">I understand the policy and let me in the waitlist/
+                    我已阅读注意事项，加入等待名单</button>
                 {% else %}
-                    <a class="btn btn-info" disabled>I understand the policy and let me in the waitlist、
-                    我已阅读注意事项，加入等待名单</a>
+                    <button type="submit" class="btn btn-info" disabled>I understand the policy and let me in the waitlist、
+                    我已阅读注意事项，加入等待名单</button>
                 {% endif %}
             {% else %}
                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -62,9 +62,7 @@
         {% endif %}
     </div>
     <script>
-        //var today = new Date().toISOString().split('T')[0];
-        var birth = new Date(2002, 0, 1);
-        birth.setDate(tomorrow.getDate() - 1)
+        var birth = new Date(2002, 0, 0);
         document.getElementsByName("birthday")[0].setAttribute('max', birth.toISOString().split('T')[0]);
     </script>
 </div>

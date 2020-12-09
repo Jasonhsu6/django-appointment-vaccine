@@ -54,29 +54,32 @@ def confirm(request):
         info["date"] = request.session.get("schedule_date")
         info["time"] = request.session.get("schedule_time")
         info["email"] = request.POST.get("email")
-        if Appointment.objects.filter(date=datetime.datetime.strptime(info["date"], "%m/%d/%Y").date().strftime("%Y-%m-%d"),
-                                      time=info["time"]):
-            message = "someone has already taken this appointment slot or"
-            return render(request, "failure.html", context={"message": message})
-        elif Appointment.objects.filter(phone=info["phone"]).count() >= 5:
+        # check if a number made 5 times appointment
+        if Appointment.objects.filter(phone=info["phone"]).count() >= 5:
             message = "you have exceeded the limit of making appointment (maximum 5 per number)"
             return render(request, "failure.html", context={"message": message})
-        else:
-            if info["time"] == "waitlist":
-                info["time"] = None
-            appointment = Appointment(
-                date=datetime.datetime.strptime(info["date"], "%m/%d/%Y").date().strftime("%Y-%m-%d"),
-                time=info["time"],
-                first_name=info["first_name"], last_name=info["last_name"],
-                email=info["email"], phone=info["phone"], birthday=info["birthday"])
-            appointment.save()
-            if info["email"]:
-                if info["time"]:
-                    send_confirmation_email(info, "appointment")
-                else:
-                    send_confirmation_email(info, "waitlist")
-            return render(request, "success.html")
+        # check if a time slot is taken (only when an appointment is taken, not a waitlist)
+        if info["time"] != "waitlist" and Appointment.objects.filter(date=datetime.datetime.strptime(info["date"],
+                                            "%m/%d/%Y").date().strftime("%Y-%m-%d"), time=info["time"]):
+            message = "someone has already taken this appointment slot"
+            return render(request, "failure.html", context={"message": message})
+
+        if info["time"] == "waitlist":
+            info["time"] = None
+        appointment = Appointment(
+            date=datetime.datetime.strptime(info["date"], "%m/%d/%Y").date().strftime("%Y-%m-%d"),
+            time=info["time"],
+            first_name=info["first_name"], last_name=info["last_name"],
+            email=info["email"], phone=info["phone"], birthday=info["birthday"])
+        appointment.save()
+        if info["email"]:
+            if info["time"] is not None:
+                send_confirmation_email(info, "appointment")
+            else:
+                send_confirmation_email(info, "waitlist")
+        return render(request, "success.html")
     return render(request, "confirmation.html")
+
 
 # def confirm(request):
 #     if request.method == "POST":
