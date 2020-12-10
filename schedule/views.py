@@ -72,12 +72,16 @@ def confirm(request):
             first_name=info["first_name"], last_name=info["last_name"],
             email=info["email"], phone=info["phone"], birthday=info["birthday"])
         appointment.save()
-        if info["email"]:
-            if info["time"] is not None:
-                send_confirmation_email(info, "appointment")
-            else:
-                send_confirmation_email(info, "waitlist")
-        return render(request, "success.html")
+        # if info["email"]:
+        #     if info["time"] is not None:
+        #         send_confirmation_email(info, "appointment")
+        #     else:
+        #         send_confirmation_email(info, "waitlist")
+        return render(request, "success.html", context = {
+            'name': info["first_name"] + " " + info["last_name"],
+            'date': info["date"],
+            'time': info["time"]
+        })
     return render(request, "confirmation.html")
 
 

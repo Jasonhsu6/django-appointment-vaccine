@@ -66,8 +66,14 @@ WSGI_APPLICATION = 'appointment.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR + "/" + 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'Host': 'ec2-3-210-23-22.compute-1.amazonaws.com',
+        'NAME': 'AllDayPharmacy',
+        'USER': 'zvktesemzntujp',
+        'PASSWORD': '10cd763ec939b2adb8873aab98793f32bc7700d9ca425b0e0d40739152c1a639',
+        'URL': 'postgres://zvktesemzntujp:10cd763ec939b2adb8873aab98793f32bc7700d9ca425b0e0d40739152c1a639@ec2-3-210'
+               '-23-22.compute-1.amazonaws.com:5432/dq1r9hfu4s4p6',
+        'PORT': '5432',
     }
 }
 
@@ -142,9 +148,9 @@ TEMPLATES = [
     },
 ]
 
-EMAIL_HOST = 'smtp.mailtrap.io'
-EMAIL_HOST_USER = '8d56457a3d2755'
-EMAIL_HOST_PASSWORD = 'b201dca682fc42'
-EMAIL_PORT = '2525'
+# EMAIL_HOST = 'smtp.mailtrap.io'
+# EMAIL_HOST_USER = '8d56457a3d2755'
+# EMAIL_HOST_PASSWORD = 'b201dca682fc42'
+# EMAIL_PORT = '2525'
 
 django_heroku.settings(locals())

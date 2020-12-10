@@ -9,7 +9,7 @@
                 <form action="/schedule/" method="post">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="schedule_date">Choose a date:</label>
+                        <label for="schedule_date">Choose a date/选择日期:</label>
                         {% if request.session.schedule_date %}
                             <input required type="date" class="form-control" id="schedule_date" name="schedule_date"
                             value="{{ request.session.schedule_date }}">
@@ -22,6 +22,7 @@
                 {% if available %}
                 {% if request.session.schedule_date %}
                     <h4>Available appointments for {{ request.session.schedule_date }}</h4>
+                    <h4>可预约时段(月/日/年){{ request.session.schedule_date }}</h4>
                     <form action="/schedule/" method="post">
                         {% csrf_token %}
 
@@ -40,10 +41,10 @@
                             <div class="form-check form-check-inline">
                                 {% if headcount < 3 %}
                                     <input class="form-check-input" type="radio" name="schedule_time" id="schedule_time" value="waitlist">
-                                    <label class="form-check-label" for="schedule_time">Waitlist: {{ headcount }}/3</label>
+                                    <label class="form-check-label" for="schedule_time">Waitlist/等待名单: {{ headcount }}/3</label>
                                 {% else %}
                                     <input class="form-check-input" type="radio" name="schedule_time" id="schedule_time" value="waitlist">
-                                    <label class="form-check-label" for="schedule_time">Waitlist: {{ headcount }}/3</label>
+                                    <label class="form-check-label" for="schedule_time">Waitlist/等待名单: {{ headcount }}/3</label>
                                 {% endif %}
                             </div>
                         <hr>
