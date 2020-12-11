@@ -8,12 +8,12 @@
 <!--    <p class="lead">您将会收到邮件消息</p>-->
   {% if date and time != None %}
     <p>This message is a reminder that <strong>{{ name }}</strong>
-    has an appointment at AllDay Pharmacy on <strong>{{ date }}</strong> at <strong>{{ time }}
+    has an appointment at Allday Pharmacy on <strong>{{ date }}</strong> at <strong>{{ time }}
     </strong></p>
     <p>提醒：<strong>{{ name }}</strong>已经成功完成于<strong>{{ date }}</strong> <strong>{{ time }}</strong>的预约</p>
   {% else %}
     <p>This message is a reminder that <strong>{{ name }}</strong>
-    has joined waitlist at AllDay Pharmacy on <strong>{{ date }}</strong></p>
+    has joined waitlist at Allday Pharmacy on <strong>{{ date }}</strong></p>
     <p>提醒：<strong>{{ name }}</strong>已经成功加入<strong>{{ date }}</strong>的等待名单</p>
   {% endif %}
     <p>We will call you one day ahead to tell you more about our schedule</p>
@@ -22,8 +22,7 @@
     <p class="lead">如果您想取消或者修改预约请<strong>致电我们</strong></p>
   <hr>
   <p>
-    Having trouble? <a href="tel:+17188863288">Call us/致电</a> or
-    <a href="mailto:alldaypharmacyinc@gmail.com">Email us/邮件联系我们</a>
+    Having trouble? <a href="tel:+17188863288">Call us/致电</a>
   </p>
   <p class="lead">
     <a class="btn btn-primary btn-sm" href="/" role="button">Return to homepage/返回主页</a>
