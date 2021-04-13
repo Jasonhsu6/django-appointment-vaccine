@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from .forms import AppointmentForm
-from .models import Appointment
+from .models import Appointment, WaitList
 
 
 def test(request):
@@ -24,9 +24,9 @@ def index(request):
 
 # cannot add timedelta to datetime.time
 def get_time_slots():
-    start = datetime.datetime(100, 1, 1, 9, 0, 0)
+    start = datetime.datetime(100, 1, 1, 10, 0, 0)
     slots = []
-    while start.time() < datetime.time(17, 0, 0):
+    while start.time() < datetime.time(16, 0, 0):
         slots.append(start.time().strftime("%I:%M %p"))
         start += datetime.timedelta(minutes=30)
     return slots
@@ -34,6 +34,9 @@ def get_time_slots():
 
 def check_availability(request):
     date = request.POST["schedule_date"]
+    if Appointment.objects.filter(date=date).count() >= 10:
+        available = "waitlist"
+        return available
     time_slots = get_time_slots()
     available = []
     for time_slot in time_slots:
@@ -59,13 +62,11 @@ def confirm(request):
             message = "you have exceeded the limit of making appointment (maximum 5 per number)"
             return render(request, "failure.html", context={"message": message})
         # check if a time slot is taken (only when an appointment is taken, not a waitlist)
-        if info["time"] != "waitlist" and Appointment.objects.filter(date=datetime.datetime.strptime(info["date"],
+        if Appointment.objects.filter(date=datetime.datetime.strptime(info["date"],
                                             "%m/%d/%Y").date().strftime("%Y-%m-%d"), time=info["time"]):
             message = "someone has already taken this appointment slot"
             return render(request, "failure.html", context={"message": message})
 
-        if info["time"] == "waitlist":
-            info["time"] = None
         appointment = Appointment(
             date=datetime.datetime.strptime(info["date"], "%m/%d/%Y").date().strftime("%Y-%m-%d"),
             time=info["time"],
@@ -155,3 +156,23 @@ def schedule(request):
             request.session["schedule_time"] = str_time
             return redirect("/confirm/")
     return render(request, "schedule.html", context={"time_slots": time_slots})
+
+
+def waitlist(request):
+    if request.method == "POST":
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        phone = request.POST.get("phone")
+        birthday = request.POST.get("birthday")
+        # date and time are datetime object
+        email = request.POST.get("email")
+        preferred_date = request.POST.get("preferred_date")
+        waitlist = WaitList(
+            date=datetime.datetime.strptime(preferred_date, "%m/%d/%Y").date().strftime("%Y-%m-%d"),
+            first_name=first_name, last_name=last_name, email=email, phone=phone, birthday=birthday)
+        waitlist.save()
+        return render(request, "success.html", context = {
+            'name': first_name + " " + last_name,
+            'date': preferred_date
+        })
+    return render(request, "waitlist.html")

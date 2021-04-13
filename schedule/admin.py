@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Appointment
+from .models import Appointment, WaitList
 
 
 # Register your models here.
@@ -14,14 +14,14 @@ class AppointmentAdmin(admin.ModelAdmin):
 admin.site.register(Appointment, AppointmentAdmin)
 
 
-# class WaitListAdmin(admin.ModelAdmin):
-#     list_display = ('picked', 'first_name', 'last_name', 'birthday', 'email', 'phone')
-#     list_filter = ('picked',)
-#
-#     def pick(modeladmin, request, queryset):
-#         queryset.update(picked=True)
-#     pick.short_description = "Mark as picked"
-#     actions = [pick]
+class WaitListAdmin(admin.ModelAdmin):
+    list_display = ('picked', 'first_name', 'last_name', 'birthday', 'email', 'phone')
+    list_filter = ('picked',)
+
+    def pick(modeladmin, request, queryset):
+        queryset.update(picked=True)
+    pick.short_description = "Mark as picked"
+    actions = [pick]
 
 
-# admin.site.register(WaitList, WaitListAdmin)
+admin.site.register(WaitList, WaitListAdmin)

@@ -23,6 +23,7 @@ urlpatterns = [
     # path('appointments/', views.test),
     path('schedule/', views.schedule),
     path('confirm/', views.confirm),
-    path("test/", views.test)
+    path("test/", views.test),
+    path('waitlist', views.waitlist),
 ]
 
