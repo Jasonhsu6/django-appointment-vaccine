@@ -9,7 +9,7 @@
                 <form action="/schedule/" method="post">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="schedule_date">Choose a date/选择日期:</label>
+                        <label for="schedule_date">Choose a date(we accept 14 days ahead appointments)/选择日期(接受14天内的预约):</label>
                         {% if request.session.schedule_date %}
                             <input required type="date" class="form-control" id="schedule_date" name="schedule_date"
                             value="{{ request.session.schedule_date }}">
@@ -53,8 +53,11 @@
     </section>
     <script>
         var tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1)
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        var max_date = new Date();
+        max_date.setDate(max_date.getDate() + 15);
         document.getElementsByName("schedule_date")[0].setAttribute('min', tomorrow.toISOString().split('T')[0]);
+        document.getElementsByName("schedule_date")[0].setAttribute('max', max_date.toISOString().split('T')[0]);
     </script>
 {% include "footer.html" %}
 </body>

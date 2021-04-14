@@ -24,11 +24,11 @@
             <small class="form-text text-muted">We'll never share your info with anyone else.</small>
             <div class="form-group">
                 <label for="first_name">First Name:</label>
-                <input required type="text" class="form-control" id="first_name" name="first_name">
+                <input required type="text" pattern="[a-zA-Z]+" class="form-control" id="first_name" name="first_name">
             </div>
             <div class="form-group">
                 <label for="last_name">Last Name: </label>
-                <input type="text" class="form-control" id="last_name" name="last_name">
+                <input required type="text" pattern="[a-zA-Z]+" class="form-control" id="last_name" name="last_name">
             </div>
             <div class="form-group">
                 <label for="birthday">Date of birth/生日: </label>
@@ -36,7 +36,10 @@
             </div>
             <div class="form-group">
                 <label for="phone">Phone/电话: </label>
-                <input required type="text" class="form-control" id="phone" name="phone">
+                <small class="form-text text-muted">Please follow the format as 123-456-7890</small>
+                <small class="form-text text-muted">请按照格式123-456-7890填写</small>
+                <input required type="tel" class="form-control" id="phone" name="phone" maxlength="14"
+                       placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
             </div>
             <small class="form-text text-muted">Email is optional</small>
             <div class="form-group">
