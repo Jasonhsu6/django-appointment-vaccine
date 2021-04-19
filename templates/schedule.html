@@ -19,6 +19,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Check Availability/确认可预约时间段</button>
                 </form>
+                <a href="/waitlist/"><button class="btn btn-info">Choose to join waitlist/选择加入等候名单</button></a>
                 {% if available %}
                     {% if available == "waitlist "%}
                         <h4>The Appointment in {{ request.session.schedule_date }} has exceed the limit, Please select another date</h4>

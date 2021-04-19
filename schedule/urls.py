@@ -24,6 +24,6 @@ urlpatterns = [
     path('schedule/', views.schedule),
     path('confirm/', views.confirm),
     path("test/", views.test),
-    path('waitlist', views.waitlist),
+    path('waitlist/', views.waitlist),
 ]
 
